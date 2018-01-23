@@ -7,13 +7,13 @@ Add your BitBucket credentials to ~/.netrc and edit the import-repos.sh script t
 
 The script will scan directory projects and will expect a following setup : 
 
-projects/projectA/repo_a
-projects/projectA/repo_b
-projects/projectA/repo_somethingelse
-projects/projectB/repo1
-projects/projectB/repo2
-projects/projectC/repo1
-projects/projectC/repo2
+- projects/projectA/repo_a
+- projects/projectA/repo_b
+- projects/projectA/repo_somethingelse
+- projects/projectB/repo1
+- projects/projectB/repo2
+- projects/projectC/repo1
+- projects/projectC/repo2
 
 
 # Limitations
@@ -22,9 +22,9 @@ Each repository is expected to be a --bare type git repo, usually produced by a 
 # Output
 The end result will be the following structure in BitBucket (in a form of urls) :
 
-bitbucket/projects/project1/repos/repo_a
-bitbucket/projects/project1/repos/repo_b
-bitbucket/projects/project1/repos/repo_somethingelse 
+- bitbucket/projects/project1/repos/repo_a
+- bitbucket/projects/project1/repos/repo_b
+- bitbucket/projects/project1/repos/repo_somethingelse 
 
 and so on.
 
