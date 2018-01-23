@@ -22,9 +22,9 @@ Each repository is expected to be a --bare type git repo, usually produced by a 
 # Output
 The end result will be the following structure in BitBucket (in a form of urls) :
 
-- bitbucket/projects/project1/repos/repo_a
-- bitbucket/projects/project1/repos/repo_b
-- bitbucket/projects/project1/repos/repo_somethingelse 
+- bitbucket/projects/projectA/repos/repo_a
+- bitbucket/projects/projectA/repos/repo_b
+- bitbucket/projects/projectA/repos/repo_somethingelse 
 
 and so on.
 
