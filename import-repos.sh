@@ -42,6 +42,6 @@ for project in $(find projects -mindepth 1 -maxdepth 1 -type d | cut -d\/ -f2) ;
 		git remote set-url origin https://${username}@${bitbucket_url}/scm/${project}/${repo_lc}.git
 		git push -u origin --all
 		git push origin --tags
-		rm -rf repos_tmp${repo_lc}
+		rm -rf repos_tmp/${repo_lc}
 	done # repo
 done # project

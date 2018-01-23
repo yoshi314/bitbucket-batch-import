@@ -5,7 +5,7 @@ A simple script to mass import repositories to bitbucket
 
 Add your BitBucket credentials to ~/.netrc and edit the import-repos.sh script to configure it
 
-The script will scan directory ``projects'' and will expect a following setup : 
+The script will scan directory ``projects`` and will expect a following setup : 
 
 - projects/projectA/repo_a
 - projects/projectA/repo_b
