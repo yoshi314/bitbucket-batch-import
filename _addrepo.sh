@@ -1,14 +1,16 @@
 #!/bin/bash
-
-if [ $# -lt 1 ] ; then
-	echo "$0 bitbucket_url project reponame"
-	exit 1
+if [ $# -lt 4 ] ; then
+    echo "$0 bitbucket_url [project_key] [repo] [username] [password] [team - optional]"
+    exit 1
 fi
 
-bitbucket_url=$1
-project=$2
-repo=$3
+BITBUCKET_URL=$1
+PROJECT_KEY=$2
+REPO=$3
+USERNAME=$4
+PASSWORD=$5
+TEAM=$6
 
-postdata=$(cat newrepo.json | sed -e "s/@reponame@/$repo/g")
+POST_DATA=$(cat new-repo.json | sed -e "s/@project_key@/$PROJECT_KEY/g")
 
-curl -n  -H 'Content-Type: application/json' -d "$postdata" -X POST https://${bitbucket_url}/rest/api/1.0/projects/${project}/repos | python -m json.tool 
+curl --user ${USERNAME}:${PASSWORD} -H "Content-Type: application/json" --data "${POST_DATA}" -X POST  https://${BITBUCKET_URL}/2.0/repositories/${TEAM}/${REPO} | python -m json.tool
