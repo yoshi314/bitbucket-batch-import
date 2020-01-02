@@ -1,18 +1,25 @@
-#!/bin/bash
-
+#!/bin/bash -x
+if [ "$#" -lt 2 ]
+then
+    echo "Usage: ./import-repos.sh [username] [password] [team - optional]"
+    exit 1
+fi
 
 # your bitbucket login, user should have permissions to commit and create repositories in a project
-username=login
-# bitbucket url
-bitbucket_url=bitbucket.localdomain.com
+USERNAME=$1
+PASSWORD=$2
+TEAM=${3:-$1} # OPTIONAL
 
-mydir=${PWD}
+# bitbucket url
+BITBUCKET_URL=api.bitbucket.org
+
+MY_DIR=${PWD}
 
 rm -rf repos_tmp || true
 mkdir repos_tmp
 
 # put your repos in such layout
-# they ought to be in git --bare format, assuming you've just converted them from svn via a migration tool
+# if converted from svn via migration tool they will be in git --bare format
 
 # projects/project1/repo1
 # projects/project1/repo2
@@ -22,26 +29,29 @@ mkdir repos_tmp
 
 # this will directly convert into bitbucket_url/project1/repo1 , and so on
 
-
-for project in $(find projects -mindepth 1 -maxdepth 1 -type d | cut -d\/ -f2) ; do
-	for repo in $(find projects/${project}  -mindepth 1 -maxdepth 1 -type d | cut -d\/ -f3) ; do 
-		echo "Working on $project/$repo"
-
-		cd $mydir # reset directory after each loop
-
-		# bitbucket is picky about certain characters in project/repo names
-
-		repo_lc=$(echo $repo | tr '[:upper:]' '[:lower:]' | tr '[ +]' '[__]')
-		./_addrepo.sh $bitbucket_url $project $repo_lc
-	
-		# convert git repository into a checkout, to push it out into bitbucket
-		git clone projects/${project}/${repo} repos_tmp/${repo_lc}
-	
-		# add remotes
-		cd repos_tmp/${repo_lc}
-		git remote set-url origin https://${username}@${bitbucket_url}/scm/${project}/${repo_lc}.git
-		git push -u origin --all
-		git push origin --tags
-		rm -rf repos_tmp/${repo_lc}
-	done # repo
+for PROJECT in $(find projects -mindepth 1 -maxdepth 1 -type d | cut -d\/ -f2) ; do
+    for REPO in $(find projects/${PROJECT}  -mindepth 1 -maxdepth 1 -type d | cut -d\/ -f3) ; do
+        echo "Working on $PROJECT/$REPO"
+        
+        # bitbucket is picky about certain characters in project/repo names
+        REPO_LC=$(echo $REPO | tr '[:upper:]' '[:lower:]' | tr '[ +]' '[__]')
+        ./_addrepo.sh $BITBUCKET_URL $PROJECT $REPO_LC $USERNAME $PASSWORD $TEAM
+        
+        # convert git repository into a checkout, to push it out into bitbucket
+        git clone projects/${PROJECT}/${REPO} repos_tmp/${REPO_LC}
+        
+        # add remotes
+        cd repos_tmp/${REPO_LC}
+        git remote set-url origin git@bitbucket.org:${TEAM}/${REPO_LC}.git
+        
+        # push
+        git push -u origin --all
+        git push origin --tags
+        rm -rf repos_tmp/${REPO_LC}
+        
+        # reset directory after each loop
+        cd $MY_DIR
+    done # repo
 done # project
+
+exit 0
