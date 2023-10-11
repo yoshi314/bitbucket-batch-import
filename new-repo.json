@@ -1,5 +1,8 @@
 {
-    "name": "@reponame@",
-    "scmId": "git",
-    "forkable": true
+  "scm": "git",
+  "is_private": "true",
+  "fork_policy": "no_public_forks",
+  "project": {
+    "key": "@project_key@"
+  }
 }
